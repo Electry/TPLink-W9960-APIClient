@@ -1,5 +1,5 @@
 '''
-TP-Link TD-W9960 API client v0.1.0
+TP-Link TD-W9960 API client v0.1.1
 
 Compatible (tested) with versions:
   Firmware: 1.2.0 0.8.0 v009d.0 Build 201016 Rel.78709n
@@ -43,6 +43,7 @@ class UserConflictException(LoginException):
 
 class TPLinkClient:
     RSA_USE_PKCS_V1_5 = False # no padding for the W9960
+    REQUEST_RETRIES = 3
 
     AES_KEY_LEN = 128 // 8
     AES_IV_LEN = 16
@@ -261,12 +262,6 @@ class TPLinkClient:
         '''
         url = self.get_url('cgi/getParm')
         (code, response) = self.__request(url)
-
-        # sometimes we get 500 here, not sure why... just repeat the request
-        if code == 500:
-            time.sleep(0.2)
-            (code, response) = self.__request(url)
-
         assert code == 200
 
         # assert return code
@@ -381,13 +376,22 @@ class TPLinkClient:
         else:
             data = data_str
 
-        # send the request
-        if method == 'POST':
-            r = self.req.post(url, data = data, headers = headers)
-        elif method == 'GET':
-            r = self.req.get(url, data = data, headers = headers)
-        else:
-            raise Exception('Unsupported method ' + str(method))
+        retry = 0
+        while retry < self.REQUEST_RETRIES:
+            # send the request
+            if method == 'POST':
+                r = self.req.post(url, data = data, headers = headers)
+            elif method == 'GET':
+                r = self.req.get(url, data = data, headers = headers)
+            else:
+                raise Exception('Unsupported method ' + str(method))
+
+            # sometimes we get 500 here, not sure why... just retry the request
+            if r.status_code != 500:
+                break
+
+            time.sleep(0.05)
+            retry += 1
 
         self.logger.debug('<Request  {}>'.format(r.url))
         self.logger.debug(r)
