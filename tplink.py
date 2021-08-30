@@ -387,7 +387,7 @@ class TPLinkClient:
                 raise Exception('Unsupported method ' + str(method))
 
             # sometimes we get 500 here, not sure why... just retry the request
-            if r.status_code != 500:
+            if r.status_code != 500 and '<title>500 Internal Server Error</title>' not in r.text:
                 break
 
             time.sleep(0.05)
@@ -487,8 +487,8 @@ class TPLinkClient:
             # hexlify to string
             enc_str = binascii.hexlify(enc).decode('utf8')
 
-            # add '0' hex char to the start if the length is not even
-            if len(enc_str) % 2 != 0:
+            # pad the start with '0' hex char
+            while len(enc_str) < rsa_byte_len * 2:
                 enc_str = '0' + enc_str
 
             signature += enc_str
