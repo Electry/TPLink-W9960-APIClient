@@ -3,8 +3,12 @@
 An example implementation of authentication and E2E comms. via the /cgi_gdpr API endpoint on official TP-Link firmware.
 
 ### Compatible (tested) versions
+#### TD-W9960
 * **Firmware:** 1.2.0 0.8.0 v009d.0 Build 201016 Rel.78709n
 * **Hardware:** TD-W9960 v1 00000000 (TD-W9960 V1.20 - blue case)
+#### Archer VR600
+* **Firmware:** 1.4.0 0.9.1 v009e.0 Build 210826 Rel.42166n
+* **Hardware:** Archer VR600 v3 00000000
 
 ### Example usage
 ```
