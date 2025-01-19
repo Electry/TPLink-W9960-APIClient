@@ -68,11 +68,11 @@ class TPLinkClient:
     ACT_OP = 7
     ACT_CGI = 8
 
-    REGEX_TOKEN = '<script type="text\/javascript">var token="(.*)";<\/script>'
-    REGEX_RETURN_VALUE = '\$\.ret=(.*);'
-    REGEX_GET_PARM = 'var ee="(.*)";\nvar nn="(.*)";\nvar seq="(.*)";'
-    REGEX_GET_BUSY = 'var isLogined=([01]);\nvar isBusy=([01]);'
-    REGEX_PWD_NOT_CORRENT_INFO = 'var currAuthTimes=(.*);\nvar currForbidTime=(.*);'
+    REGEX_TOKEN = r'<script type="text\/javascript">var token="(.*)";<\/script>'
+    REGEX_RETURN_VALUE = r'\$\.ret=(.*);'
+    REGEX_GET_PARM = r'var ee="(.*)";\nvar nn="(.*)";\nvar seq="(.*)";'
+    REGEX_GET_BUSY = r'var isLogined=([01]);\nvar isBusy=([01]);'
+    REGEX_PWD_NOT_CORRENT_INFO = r'var currAuthTimes=(.*);\nvar currForbidTime=(.*);'
 
     class ActItem:
         def __init__(self, type, oid, stack = '0,0,0,0,0,0', pstack = '0,0,0,0,0,0', attrs = []):
